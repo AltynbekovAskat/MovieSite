@@ -3,14 +3,19 @@ from .models import *
 from modeltranslation.admin import TranslationAdmin
 
 
+class MovieLanguagesInline(admin.TabularInline):
+    model = MovieLanguages
+    extra = 1
+
+
 class MovieMomentsInline(admin.TabularInline):
     model = Moments
     extra = 1
 
 
 @admin.register(Movie)
-class ProductAdmin(TranslationAdmin):
-    inlines = [MovieMomentsInline]
+class MovieAdmin(TranslationAdmin):
+    inlines = [MovieLanguagesInline, MovieMomentsInline]
 
     class Media:
         js = (
@@ -28,7 +33,6 @@ admin.site.register(Country)
 admin.site.register(Director)
 admin.site.register(Actor)
 admin.site.register(Janre)
-admin.site.register(MovieLanguages)
 admin.site.register(Rating)
 admin.site.register(Favorite)
 admin.site.register(FavoriteMovie)

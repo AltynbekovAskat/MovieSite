@@ -15,7 +15,7 @@ class Profile(AbstractUser):
     status = models.CharField(max_length=10, choices=STATUS_CHOICES, default='simple', null=True)
 
     def __str__(self):
-        return f' {self.first_name} - {self.last_name}'
+        return self.status
 
 
 class Country(models.Model):
@@ -66,7 +66,7 @@ class Movie(models.Model):
         ('720', '720'),
         ('1080', '1080')
     )
-    types = MultiSelectField(max_length=10, choices=TYPES_CHOICES)
+    types = MultiSelectField(max_length=10, choices=TYPES_CHOICES, max_choices=5)
     movie_time = models.TimeField(auto_now=True)
     description = models.TextField()
     movie_trailer = models.FileField(verbose_name='видео', null=True, blank=True)
@@ -94,7 +94,7 @@ class MovieLanguages(models.Model):
     movie = models.ForeignKey(Movie, on_delete=models.CASCADE)
 
     def __str__(self):
-        return f' {self.language}'
+        return f' {self.language}, {self.movie}'
 
 
 class Moments(models.Model):
@@ -111,7 +111,7 @@ class Rating(models.Model):
     created_date = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return f' {self.user}'
+        return f' {self.user}, {self.movie}'
 
 
 class Favorite(models.Model):
@@ -131,9 +131,9 @@ class FavoriteMovie(models.Model):
 
 
 class History(models.Model):
-    user = models.ForeignKey(Profile, related_name='history_user', on_delete=models.CASCADE)
-    movie = models.ForeignKey(Movie, related_name='movie_history', on_delete=models.CASCADE)
+    user = models.ForeignKey(Profile, on_delete=models.CASCADE)
+    movie = models.ForeignKey(Movie, on_delete=models.CASCADE)
     viewed_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return f' {self.user}'
+        return f' {self.user}, {self.movie}'
